@@ -59,24 +59,24 @@
 
 ### `search_listings`
 
-- **What it does:**
+- **What it does:** searches for items matching the descriptions  
 - **Inputs:** <!-- name and type each: `max_price` (float), not "a price" -->
-- **Returns:**
-- **When it has nothing:**
+- **Returns:** lists searched items 
+- **When it has nothing:** returns empty list, message, and stops
 
 ### `suggest_outfit`
 
-- **What it does:**
-- **Inputs:**
-- **Returns:**
-- **When it has nothing:**
+- **What it does:** generates outfits based on wardrobe 
+- **Inputs:** new_item, wardrobe 
+- **Returns:** returns a suggested items based on item and wardrobe 
+- **When it has nothing:** returns a message and stops 
 
 ### `create_fit_card`
 
-- **What it does:**
-- **Inputs:**
-- **Returns:**
-- **When it has nothing:**
+- **What it does:** writes a short caption 
+- **Inputs:** outfit, new_item 
+- **Returns:** returns a generated caption based on the item 
+- **When it has nothing:** returns a descriptive message rather than raising an error
 
 ---
 
@@ -93,7 +93,7 @@
      The grader checks your code against what you claim here, so the file and
      function have to be real. -->
 
-**Branch rule:**
+**Branch rule:** if suggest_outfit returns nothing, output a message in the session and stop. otherwise its output would be passed into the create_fit_card
 
 **Where it lives:** `agent.py::run_agent`
 
