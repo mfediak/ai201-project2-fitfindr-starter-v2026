@@ -60,23 +60,23 @@
 ### `search_listings`
 
 - **What it does:** searches for items matching the descriptions  
-- **Inputs:** <!-- name and type each: `max_price` (float), not "a price" -->
-- **Returns:** lists searched items 
-- **When it has nothing:** returns empty list, message, and stops
+- **Inputs:** description (str), size (str), max_price (float or none)
+- **Returns:** returns a list of items matching the descriptions 
+- **When it has nothing:** returns empty list 
 
 ### `suggest_outfit`
 
 - **What it does:** generates outfits based on wardrobe 
-- **Inputs:** new_item, wardrobe 
-- **Returns:** returns a suggested items based on item and wardrobe 
-- **When it has nothing:** returns a message and stops 
+- **Inputs:** (dict) new_item - a single listing from search_listings, wardrobe (dict) - items key holding list 
+- **Returns:** returns str with at least one outfit suggestion 
+- **When it has nothing:** returns a message, the program stops
 
 ### `create_fit_card`
 
-- **What it does:** writes a short caption 
-- **Inputs:** outfit, new_item 
-- **Returns:** returns a generated caption based on the item 
-- **When it has nothing:** returns a descriptive message rather than raising an error
+- **What it does:** writes a short caption
+- **Inputs:** (str) outfit - suggestion string from suggest_outfit, (dict) new_item - the selected listing
+- **Returns:** returns a generated caption (str), 2-4 sentence caption 
+- **When it has nothing:** if outfit is empty, nothing would be outputted as the program would be stopped. otherwise returns a descriptive caption 
 
 ---
 

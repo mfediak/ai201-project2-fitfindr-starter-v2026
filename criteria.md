@@ -29,6 +29,8 @@ tool calls and returns a fit card — in at least 4 of 5 tries.
      "my search is a plain keyword match and some phrasings will miss" is a
      real answer. -->
 
+     My search is a plain keyword match and some phrasings will miss, resulting in error message. 
+
 ---
 
 ## 2. An impossible query stops before the second tool
@@ -39,6 +41,8 @@ Given a query that matches no listings, the agent stops before calling
 **Why this target:**
 <!-- Why is 5 of 5 reasonable here when criterion 1 isn't? What's different
      about this path? -->
+
+     Suggest_outfit wouldn't be able to generate outfits without a given query with listings - 5 of 5 tries. 
 
 ---
 
@@ -55,9 +59,12 @@ Given a query that matches no listings, the agent stops before calling
      suggest_outfit is the shape you're after. -->
 
 
+     The item search found must be the same new_item used in search_item - 5 of 5 tries. 
 
 **Why this target:**
 
+     A failure would be when the ids differ which would result in a selected item new_item that is held in a different listing. 
+     
 
 
 ---
@@ -75,10 +82,10 @@ Given a query that matches no listings, the agent stops before calling
      sentence? A card longer than a caption anyone would post? Any of those can
      be turned into a number. -->
 
-
+     In each run, the caption produced by create_fit_card must not begin as the same first sentence as the caption for a different item - 4 out of 5 tries. 
 
 **Why this target:**
-
+     Caption wording can change between runs, so exact wording doesn't matter.
 
 
 ---
@@ -92,10 +99,11 @@ Given a query that matches no listings, the agent stops before calling
      search respects a price ceiling — anything, as long as it names a number
      or an observable outcome. -->
 
+     When a query includes a max_price, every listing in search_listings returns costs at most at that amount, in 5 of 5 tries 
 
 
 **Why this target:**
-
+     If it lets one over-budget item through, the agent recommends something the user said they couldn't afford which would be worst than a clumsy caption. 
 
 
 ---
