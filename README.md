@@ -41,9 +41,7 @@
 
 <!-- Three or four sentences: what a user asks for, and what they get back. -->
 
-
-
----
+This is a tool where a user can ask for a specific item and get outfit suggestions along with a capiton. One of the 3 tools is used to find listings matching to the item and then is used for outfit suggestions in the next tool. Lastly, the user will get a descriptive caption about the piece and its style. 
 
 ## Tool Inventory
 
@@ -97,9 +95,18 @@
 
 **Where it lives:** `agent.py::run_agent`
 
-**How the query is parsed:** <!-- regex, string splitting, or asking the model — say which -->
+**How the query is parsed:** with regex, in `agent.py::parse_query`. It makes no model call. One pattern finds the price ceiling ("under $30", "below 40", "up to $25", or a bare "$30") and another finds the size ("size M", "in size 8", "size US 9"). Each match is cut out of the text, and what remains, with commas removed, becomes the description. A size or price that isn't in the query comes back as `None`, which tells `search_listings` to skip that filter. Example: "vintage graphic tee under $30, size M" becomes description "vintage graphic tee", size "M", max_price 30.0.
 
-**What moves through the session:** <!-- which fields, in what order -->
+**What moves through the session:** each step writes its result into the session, and the next step reads it back out instead of receiving it directly. In order:
+
+1. `query` — what the user typed, set when the session starts.
+2. `parsed` — description, size and max_price from `parse_query`.
+3. `search_results` and `searched` — everything `search_listings` returned, and a flag that the search has run. If the list is empty, `error` is set to a message naming the query and the filters used, and the loop stops here.
+4. `selected_item` — the first search result.
+5. `outfit_suggestion` — what `suggest_outfit` returned for `selected_item` and `wardrobe`.
+6. `fit_card` — what `create_fit_card` returned for the outfit and the item.
+
+`wardrobe` is set at the start and only read. `error` stays `None` unless the run ends early, and in that case `selected_item`, `outfit_suggestion` and `fit_card` are all still `None`.
 
 ---
 
@@ -114,6 +121,29 @@
 
 ```
 $ python app.py ask '...'
+
+ python app.py ask
+Ask for something, or press Enter on an empty line to quit.
+
+> levis jeans
+
+  Found:    Vintage Levi's 501 Jeans — Medium Wash — $38.0 on depop
+
+  Outfit:   **Outfit 1: Casual Streetwear**
+*   **New Find:** Vintage Levi's 501 Jeans — Medium Wash
+*   **Top:** White ribbed tank top
+*   **Outerwear:** Vintage black denim jacket 
+*   **Shoes:** Chunky white sneakers
+*   **Accessories:** Black crossbody bag
+
+**Outfit 2: Cozy Layered Look**
+*   **New Find:** Vintage Levi's 501 Jeans — Medium Wash
+*   **Top:** Oversized grey crewneck sweatshirt
+*   **Shoes:** Black combat boots
+*   **Accessories:** Brown leather belt
+
+  Fit card: Nothing beats the wash on these vintage Levi's 501 jeans—the ultimate heavy-cotton staple your closet’s been begging for. Throw them on with a chunky sweater and boots for moody autumn strolls, or keep it breezy with a ribbed tank and sneakers. Grab this dream pair on my Depop right now for just $38.
+
 
 ```
 
@@ -165,15 +195,14 @@ Nothing beats finding a classic pair of vintage Levi's 501 jeans that already ha
 
 **Moment 1**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
-
+- *What I asked for:* I asked for a specific item 
+- *What came back:* As a result a listing came up with at least one matching keyword even if its a completely different item. 
+- *What I changed:* I made sure every keyword from search matched the exact listing 
 **Moment 2**
 
-- *What I asked for:*
-- *What came back:*
-- *What I changed:*
+- *What I asked for:* I asked for Claude to help me write the loop.
+- *What came back:* Claude wrote the loop but I had to make sure the selected_item in the search_listings was the same as in suggest_outfit
+- *What I changed:* Claude initially didn't take that into consideration so I made sure sure that the item was consistent throughout 
 
 <!-- ═══════════════════════ UNIT 4 — THE TEST ═══════════════════════
 

@@ -99,9 +99,9 @@ def search_listings(
             " ".join(listing.get("style_tags") or []),
             " ".join(listing.get("colors") or []),
         ])))
-        score = sum(1 for word in keywords if word in haystack)
-        if score > 0:
-            scored.append((score, listing))
+        # Every keyword must appear: "mini skirt" should not return a mini bag.
+        if all(word in haystack for word in keywords):
+            scored.append((len(keywords), listing))
 
     # sorted() is stable, so ties keep dataset order
     scored.sort(key=lambda pair: pair[0], reverse=True)
