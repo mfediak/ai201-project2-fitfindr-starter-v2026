@@ -224,18 +224,250 @@ Nothing beats finding a classic pair of vintage Levi's 501 jeans that already ha
 
 | Criterion | Target | Try 1 | Try 2 | Try 3 | Try 4 | Try 5 | Verdict |
 |---|---|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |  |  |
+| 1. A query the data can match. | 4 of 5 | PASS | PASS | PASS | PASS | PASS | 5/5 |
+| 2. A query nothing can match | 5 of 5| PASS | PASS| PASS| PASS | PASS | 5/5 |
+| 3. Item in new_item and search_item must match | 5 of 5 | PASS  | PASS | PASS | PASS | PASS | 5/5 |
+| 4. No two fit-card captions open with same first three words| 4 of 5 | PASS | PASS | PASS | PASS | PASS | 5 of 5 |
+| 5.  Every returned listing has price under max_price | 5 of 5 | PASS | PASS | PASS| PASS | PASS | 5/5 |
 
 **Real output from one try**, pasted as text, naming the file and function
+
+file - results/run_2026-10-13_1336_before.md
 that produced it:
 
 ```
 
+agent.py, run_agent
+**Try 1**
+
+- stopped early: no
+- selected_item: Y2K Baby Tee — Butterfly Print ($18.0, depop)
+- search_results: 3
+
+Outfit suggestion:
+
 ```
+**Outfit 1: Y2K Streetwear**
+*   Y2K Baby Tee — Butterfly Print (New Find)
+*   Baggy straight-leg jeans, dark wash
+*   Chunky white sneakers
+*   Black crossbody bag
+
+**Outfit 2: Edgy Contrast**
+*   Y2K Baby Tee — Butterfly Print (New Find)
+*   Wide-leg khaki trousers
+*   Black combat boots
+*   Vintage black denim jacket
+```
+
+- Query: `denim jacket under $50`
+- Wardrobe: empty
+
+agent.py, run_agent
+**Try 1**
+
+- stopped early: no
+- selected_item: Denim Jacket — Light Wash, Cropped ($42.0, poshmark)
+- search_results: 1
+
+Outfit suggestion:
+
+```
+Here is how to style that cropped light wash denim jacket:
+
+**Look 1: Casual Streetwear**
+*   **The cropped light wash denim jacket (new find)** balanced with an oversized, black graphic band tee.
+*   Pair with olive green cargo pants and chunky black combat boots. 
+*   Finish with a canvas crossbody bag.
+
+**Look 2: Elevated Contrast**
+*   **The cropped light wash denim jacket (new find)** layered over a fitted black ribbed turtleneck.
+*   Pair with a plaid pleated midi skirt and knee-high leather riding boots.
+*   Add a structured leather shoulder bag to dress it up.
+```
+
+Fit card:
+
+```
+Nothing beats a good cropped Wrangler denim jacket for throwing over a band tee or dressing up with a pleated midi skirt. Found this gem on Poshmark for $42 and honestly, it goes with literally everything in my closet. It’s got that perfectly broken-in 90s vibe without any of the hunting.
+```
+
+Trace:
+
+```
+[1] search_listings (via MCP)
+      in:  dict with keys: description, size, max_price
+      out: 1 items: Denim Jacket — Light Wash, Cropped
+[2] suggest_outfit
+      in:  Denim Jacket — Light Wash, Cropped ($42.0, poshmark)
+      out: Here is how to style that cropped light wash denim jacket:  **Look 1: Casual Streetwear** *   **The cropped li…
+[3] create_fit_card
+      in:  Here is how to style that cropped light wash denim jacket:  **Look 1: Casual Streetwear** *   **The cropped li…
+      out: Nothing beats a good cropped Wrangler denim jacket for throwing over a band tee or dressing up with a pleated …
+```
+
+
+
+Fit card:
+
+```
+Little butterfly baby tee just landed on the Depop for $18 and she is giving total early 2000s mall rat energy. I’m obsessed with pairing her with baggy denim and chunky sneaks, but she looks just as good toughened up with combat boots and a worn-in jacket. Grab her before I change my mind and keep it for myself!
+```
+
+Trace:
+
+```
+[1] search_listings (via MCP)
+      in:  dict with keys: description, size, max_price
+      out: 3 items: Y2K Baby Tee — Butterfly Print, Graphic Tee — 2003 Tour Bootleg Style, Vintage Band Tee — Faded Grey
+[2] suggest_outfit
+      in:  Y2K Baby Tee — Butterfly Print ($18.0, depop)
+      out: **Outfit 1: Y2K Streetwear** *   Y2K Baby Tee — Butterfly Print (New Find) *   Baggy straight-leg jeans, dark …
+[3] create_fit_card
+      in:  **Outfit 1: Y2K Streetwear** *   Y2K Baby Tee — Butterfly Print (New Find) *   Baggy straight-leg jeans, dark …
+      out: Little butterfly baby tee just landed on the Depop for $18 and she is giving total early 2000s mall rat energy…
+```
+
+agent.py, run_agent 
+**Try 1** 
+
+- stopped early: no
+- selected_item: Vintage Levi's 501 Jeans — Medium Wash ($38.0, depop)
+- search_results: 3
+
+Outfit suggestion:
+
+```
+**Outfit 1: Casual Streetwear**
+*   Vintage Levi's 501 Jeans — Medium Wash (New Find)
+*   White ribbed tank top
+*   Black cropped zip hoodie
+*   Chunky white sneakers
+*   Black crossbody bag
+
+**Outfit 2: Cozy Layered**
+*   Vintage Levi's 501 Jeans — Medium Wash (New Find)
+*   Oversized grey crewneck sweatshirt
+*   Black combat boots
+*   Brown leather belt
+```
+
+Fit card:
+
+```
+The search for the perfect vintage Levi's 501 is officially over. These medium wash denim legends have that heavy, broken-in feel and are just sitting on my Depop for $38.00. Whether you're throwing them on with a zip-up and chunky sneakers or slinging a belt over them with an oversized crewneck, they do all the heavy lifting.
+```
+
+Trace:
+
+```
+[1] search_listings (via MCP)
+      in:  dict with keys: description, size, max_price
+      out: 3 items: Vintage Levi's 501 Jeans — Medium Wash, Baggy Carpenter Jeans — Dark Wash, Straight Leg Black Jeans — Faded
+[2] suggest_outfit
+      in:  Vintage Levi's 501 Jeans — Medium Wash ($38.0, depop)
+      out: **Outfit 1: Casual Streetwear** *   Vintage Levi's 501 Jeans — Medium Wash (New Find) *   White ribbed tank to…
+[3] create_fit_card
+      in:  **Outfit 1: Casual Streetwear** *   Vintage Levi's 501 Jeans — Medium Wash (New Find) *   White ribbed tank to…
+      out: The search for the perfect vintage Levi's 501 is officially over. These medium wash denim legends have that he…
+```
+
+- Query: `vintage graphic tee under $30`
+- Wardrobe: example
+
+agent.py, run_agent
+**Try 1**
+
+- stopped early: no
+- selected_item: Y2K Baby Tee — Butterfly Print ($18.0, depop)
+- search_results: 3
+
+Outfit suggestion:
+
+```
+**Outfit 1: Y2K Streetwear**
+*   Y2K Baby Tee — Butterfly Print (New find)
+*   Baggy straight-leg jeans, dark wash
+*   Chunky white sneakers
+*   Black crossbody bag
+
+**Outfit 2: Edgy Contrast**
+*   Y2K Baby Tee — Butterfly Print (New find)
+*   Wide-leg khaki trousers
+*   Black combat boots
+*   Vintage black denim jacket
+```
+
+Fit card:
+
+```
+Found this butterfly print Y2K baby tee for just $18 and I am obsessed. It's giving off-duty pop star paired with baggy denim and chunky sneakers, but I love it just as much toughened up with combat boots and trousers. Up now on my depop!
+```
+
+Trace:
+
+```
+[1] search_listings (via MCP)
+      in:  dict with keys: description, size, max_price
+      out: 3 items: Y2K Baby Tee — Butterfly Print, Graphic Tee — 2003 Tour Bootleg Style, Vintage Band Tee — Faded Grey
+[2] suggest_outfit
+      in:  Y2K Baby Tee — Butterfly Print ($18.0, depop)
+      out: **Outfit 1: Y2K Streetwear** *   Y2K Baby Tee — Butterfly Print (New find) *   Baggy straight-leg jeans, dark …
+[3] create_fit_card
+      in:  **Outfit 1: Y2K Streetwear** *   Y2K Baby Tee — Butterfly Print (New find) *   Baggy straight-leg jeans, dark …
+      out: Found this butterfly print Y2K baby tee for just $18 and I am obsessed. It's giving off-duty pop star paired w…
+```
+
+tools.py, search_listings
+
+**Try 1**
+
+- stopped early: no
+- selected_item: High-Waisted Denim Shorts — Cutoff ($24.0, poshmark)
+- search_results: 1
+
+Outfit suggestion:
+
+```
+**Outfit 1: Casual Summer Streetwear**
+* High-Waisted Denim Shorts — Cutoff (New Find)
+* White ribbed tank top
+* Black cropped zip hoodie
+* Chunky white sneakers
+* Black crossbody bag
+
+**Outfit 2: Edgy Grunge Layering**
+* High-Waisted Denim Shorts — Cutoff (New Find)
+* White ribbed tank top
+* Vintage black denim jacket
+* Black combat boots
+* Brown leather belt
+```
+
+Fit card:
+
+```
+Finally tracked down the holy grail of vintage denim. These Levi's cutoff shorts were an absolute steal on Poshmark for just $24. They have that perfectly broken-in, effortless 90s slouch whether you're throwing them on with chunky sneakers for the weekend or toughening them up with combat boots. Tap the link to shop before I change my mind and keep them.
+```
+
+Trace:
+
+```
+[1] search_listings (via MCP)
+      in:  dict with keys: description, size, max_price
+      out: 1 items: High-Waisted Denim Shorts — Cutoff
+[2] suggest_outfit
+      in:  High-Waisted Denim Shorts — Cutoff ($24.0, poshmark)
+      out: **Outfit 1: Casual Summer Streetwear** * High-Waisted Denim Shorts — Cutoff (New Find) * White ribbed tank top…
+[3] create_fit_card
+      in:  **Outfit 1: Casual Summer Streetwear** * High-Waisted Denim Shorts — Cutoff (New Find) * White ribbed tank top…
+      out: Finally tracked down the holy grail of vintage denim. These Levi's cutoff shorts were an absolute steal on Pos…
+```
+
+
+
+```
+
 
 ---
 

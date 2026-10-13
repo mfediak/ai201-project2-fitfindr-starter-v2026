@@ -82,7 +82,8 @@ Given a query that matches no listings, the agent stops before calling
      sentence? A card longer than a caption anyone would post? Any of those can
      be turned into a number. -->
 
-     In each run, the caption produced by create_fit_card must not begin as the same first sentence as the caption for a different item - 4 out of 5 tries. 
+    For two different listings run through create_fit_card on the same outfit style, the first three words of the two captions are not identical, in 4 of 5 pairs.
+
 
 **Why this target:**
      Caption wording can change between runs, so exact wording doesn't matter.

@@ -35,6 +35,28 @@ SCENARIOS = [
         "wardrobe": "empty",
         "criterion": None,
     },
+    {
+        # Item in new_item and search_item must match. Criterion 3.
+        "name": "matching items in both tools",
+        "query": "Jeans under $50",
+        "wardrobe": "example",
+        "criterion": 3,
+    },
+    {
+        #  No two fit-card captions open with same first three words. Criterion 4.
+        "name": "different captions",
+        "query": "vintage graphic tee under $30",
+        "wardrobe": "example",
+        "criterion": 4,
+    },
+    {
+        # Every returned listing has price under max_price. Criterion 5.
+        "name": "cost is returned",
+        "query": "denim shorts under $30",
+        "wardrobe": "example",
+        "criterion": 5,
+        },
+
     # TODO: add what your criteria 3, 4 and 5 need.
     #
     # Set "criterion" to the number in criteria.md that the scenario tests.
