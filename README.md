@@ -286,12 +286,52 @@ that produced it:
 **Happy path**
 
 ```
+python app.py ask 'vintage graphic tee under $30' --trace                  
 
+[1] search_listings (via MCP)
+      in:  dict with keys: description, size, max_price
+      out: 3 items: Y2K Baby Tee — Butterfly Print, Graphic Tee — 2003 Tour Bootleg Style, Vintage Band Tee — Faded Grey
+[2] suggest_outfit
+      in:  Y2K Baby Tee — Butterfly Print ($18.0, depop)
+      out: **Outfit 1: Y2K Streetwear** *   Y2K Baby Tee — Butterfly Print (New find) *   Baggy straight-leg jeans, dark …
+[3] create_fit_card
+      in:  **Outfit 1: Y2K Streetwear** *   Y2K Baby Tee — Butterfly Print (New find) *   Baggy straight-leg jeans, dark …
+      out: Found the ultimate Y2K baby tee with the dreamiest butterfly print. It's giving 2000s mall rat whether you're …
+
+  Found:    Y2K Baby Tee — Butterfly Print — $18.0 on depop
+
+  Outfit:   **Outfit 1: Y2K Streetwear**
+*   Y2K Baby Tee — Butterfly Print (New find)
+*   Baggy straight-leg jeans, dark wash
+*   Chunky white sneakers
+*   Black crossbody bag
+
+**Outfit 2: Edgy Contrast**
+*   Y2K Baby Tee — Butterfly Print (New find)
+*   Wide-leg khaki trousers
+*   Black combat boots
+*   Vintage black denim jacket
+
+  Fit card: Found the ultimate Y2K baby tee with the dreamiest butterfly print. It's giving 2000s mall rat whether you're throwing it on with baggy denim and chunky sneakers or toughening it up with combat boots and khakis. Grab this little vintage gem on Depop right now for just $18.00 before I keep it for myself.
+
+0 model calls this session, 2 served from cache
 ```
 
 **Empty search**
 
 ```
+python app.py ask 'pink jeans under $30' --empty-wardrobe --trace          
+
+(running with an empty wardrobe)
+[1] search_listings (via MCP)
+      in:  dict with keys: description, size, max_price
+      out: [] (empty)
+[2] stop
+      →    branch: search returned nothing, no further tool calls
+
+  No listings matched "pink jeans" (under $30) for the query: 'pink jeans under $30'. You could raise your price limit or try different keywords.
+
+0 model calls this session
 
 ```
 

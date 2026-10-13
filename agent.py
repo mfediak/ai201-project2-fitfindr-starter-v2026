@@ -17,8 +17,10 @@ import re
 
 import config
 import trace
+from trace import step
 from tools import search_listings, suggest_outfit, create_fit_card
 from generate import ModelUnavailable
+from mcp_client import call_tool
 
 
 # ── session state ─────────────────────────────────────────────────────────────
@@ -113,39 +115,60 @@ def run_agent(query: str, wardrobe: dict) -> dict:
     # Each pass looks at what the session already holds and does the next
     # missing step. Every step reads its inputs back out of the session.
     count = 0
-    while True:
-        count += 1
-        trace.check_iterations(count)
+    step_name = "reading your query"
+    try:
+        while True:
+            count += 1
+            trace.check_iterations(count)
 
-        if not session["parsed"]:
-            session["parsed"] = parse_query(session["query"])
+            if not session["parsed"]:
+                session["parsed"] = parse_query(session["query"])
 
-        elif not session["searched"]:
-            parsed = session["parsed"]
-            session["search_results"] = search_listings(
-                parsed["description"], parsed["size"], parsed["max_price"]
-            )
-            session["searched"] = True
-            # THE BRANCH: nothing found → say what was searched, and stop.
-            if not session["search_results"]:
-                session["error"] = _no_results_message(session["query"], parsed)
+            elif not session["searched"]:
+                step_name = "searching listings"
+                parsed = session["parsed"]
+                session["search_results"] = call_tool("search_listings", {
+                    "description": parsed["description"],
+                    "size": parsed["size"],
+                    "max_price": parsed["max_price"],
+                })
+                session["searched"] = True
+                step("search_listings (via MCP)", inputs=parsed,
+                     returned=session["search_results"])
+                # THE BRANCH: nothing found → say what was searched, and stop.
+                if not session["search_results"]:
+                    session["error"] = _no_results_message(session["query"], parsed)
+                    step("stop", note="branch: search returned nothing, no further tool calls")
+                    return session
+
+            elif session["selected_item"] is None:
+                session["selected_item"] = session["search_results"][0]
+
+            elif session["outfit_suggestion"] is None:
+                step_name = "suggesting an outfit"
+                session["outfit_suggestion"] = suggest_outfit(
+                    session["selected_item"], session["wardrobe"]
+                )
+                step("suggest_outfit", inputs=session["selected_item"],
+                     returned=session["outfit_suggestion"])
+
+            elif session["fit_card"] is None:
+                step_name = "writing the fit card"
+                session["fit_card"] = create_fit_card(
+                    session["outfit_suggestion"], session["selected_item"]
+                )
+                step("create_fit_card", inputs=session["outfit_suggestion"],
+                     returned=session["fit_card"])
+
+            else:
                 return session
-
-        elif session["selected_item"] is None:
-            session["selected_item"] = session["search_results"][0]
-
-        elif session["outfit_suggestion"] is None:
-            session["outfit_suggestion"] = suggest_outfit(
-                session["selected_item"], session["wardrobe"]
-            )
-
-        elif session["fit_card"] is None:
-            session["fit_card"] = create_fit_card(
-                session["outfit_suggestion"], session["selected_item"]
-            )
-
-        else:
-            return session
+    except ModelUnavailable as exc:
+        session["error"] = (
+            f"The model couldn't be reached while {step_name}, so the run stopped. "
+            f"{exc}\nFix the key in .env (or check your connection) and ask again."
+        )
+        step("stop", note=f"model unavailable while {step_name}")
+    return session
 
 
 # ── query parsing ─────────────────────────────────────────────────────────────
