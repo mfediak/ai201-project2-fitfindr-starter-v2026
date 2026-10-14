@@ -204,6 +204,9 @@ Nothing beats finding a classic pair of vintage Levi's 501 jeans that already ha
 - *What came back:* Claude wrote the loop but I had to make sure the selected_item in the search_listings was the same as in suggest_outfit
 - *What I changed:* Claude initially didn't take that into consideration so I made sure sure that the item was consistent throughout 
 
+**Moment 3**
+I used Claude to help me figure out which criteria I should refine so I decided with the 3rd one. 
+
 <!-- ═══════════════════════ UNIT 4 — THE TEST ═══════════════════════
 
      Don't fill these in during unit 3.
@@ -491,11 +494,12 @@ Trace:
 
 | # | Criterion | Target | Verdict | How I decided |
 |---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-| 4 |  |  |  |  |
-| 5 |  |  |  |  |
+| 1 | A query the data can match.  | 5/5| met | for 5 of 5 runs the data matched the query  |
+| 2 | A query nothing can match | 5/5 | met | for each run where nothing was found the program stopped |
+| 3 | Item in new_item and search_item must match | 5/5  | met | 
+for each try the item from listing and in search_item matched |
+| 4 | No two fit-card captions open with same first three words | 4/5 | met | each fit_card must begin with different sentence listing |
+| 5 | Every returned listing has price under max_price | 5/5 | met | what was returned was in price range |
 
 **Diagnoses**
 
@@ -583,24 +587,30 @@ full. -->
 
      `python run_eval.py --label after` -->
 
-**What I changed:**
 
+**What I changed:**
+Something I changed is criteria 4 to target the first 3 words of the fit_card caption rather than the whole sentence. 
+ 
 **Which failure it was meant to fix:**
+I didn't miss any of my targets this time as well so I just had to refine my criteria 4. 
 
 ### Run Log — After
 
 | Criterion | Target | Try 1 | Try 2 | Try 3 | Try 4 | Try 5 | Verdict |
 |---|---|---|---|---|---|---|---|
-| 1.  |  |  |  |  |  |  |  |
-| 2.  |  |  |  |  |  |  |  |
-| 3.  |  |  |  |  |  |  |  |
-| 4.  |  |  |  |  |  |  |  |
-| 5.  |  |  |  |  |  |  |  |
+| 1.  |   A query the data can match.| 5/5 | 5/5 | 5/5| 5/5| 5/5| pass|
+| 2.  |  A query nothing can match| 5/5 | 5/5 | 5/5 | 5/5 | 5/5 | pass |
+| 3.  |  Item in new_item and search_item must match| 5/5 | 5/5 | 5/5 | 5/5 | 5/5 | pass |
+| 4.  |  No two fit-card captions open with same first three words| 5/5 | 5/5 | 5/5 | 5/5 | 5/5 | pass|
+| 5.  | Every returned listing has price under max_price  | 5/5 | 5/5 | 5/5 | 5/5 | 5/5| pass |
+
 
 **Did it help, and how do I know:**
 
 <!-- If it made things worse, say that. Honestly reported, that earns full
      credit and is more interesting than one that worked. -->
+Yes, refining my criteria did help. Under my original wording, criterion 4 passed in every try because no two captions had identical first sentence. When I changed it to compare the first three words, I was closer to missing the target. 
+
 
 
 
@@ -612,8 +622,7 @@ full. -->
      you did. "I ran out of time" is fine if it's true. Pretending nothing is
      left is not. -->
 
-
-
+There is nothing broken however, I could be more precise with my targets next time. 
 <!-- ═════════════════════════════════════════════════════════════════════
 
      SUBMISSION CHECKLIST — unit 3
